@@ -308,7 +308,29 @@ def cover_footer(c):
          M, 34, "Px", 7.4, C("#837CA6"))
 
 
+COVER_FULL = os.path.join(HERE, "cover-full.jpg") if os.path.exists(os.path.join(HERE, "cover-full.jpg")) else None
+
+
+def page_cover_full(c):
+    """Обложка из готового фона A4 (см. make_cover.py)."""
+    c.drawImage(COVER_FULL, 0, 0, W, H)
+    logo(c, M, H - 52, 12)
+    x = M
+    for s_ in ["Бесплатно", "Открытый код · MIT", "gpt-image-2"]:
+        x += chip(c, x, H - 104, s_) + 6
+    t = Paragraph("Рисуйте словами. Прямо в чате.",
+                  st(fontName="Un", fontSize=32, leading=38, textColor=C("#F2EFE6")))
+    _, th = t.wrap(CW - 60, 400); t.drawOn(c, M, H - 122 - th)
+    y = H - 122 - th - 14
+    para(c, "Пошаговая инструкция: свой генератор картинок OpenAI <b>gpt-image-2</b> в <b>Claude</b> и "
+            "<b>ChatGPT</b>. Генерация, правка своих фото, совмещение картинок — около $0.04 за картинку.",
+         M, y, 420, st(fontSize=11, leading=16, textColor=SAGE_T))
+    cover_footer(c)
+
+
 def page_cover(c):
+    if COVER_FULL:
+        return page_cover_full(c)
     c.setFillColor(DARK); c.rect(0, 0, W, H, stroke=0, fill=1)
     glow(c, W - 150, 400)
     logo(c, M, H - 52, 12)
